@@ -25,7 +25,7 @@ public class EmployeeController {
 	@Operation(summary = "Добавление типа электроники", responses = {
 			@ApiResponse(description = "Добавление типа электроники")
 	})
-	public ResponseEntity<String> addPurchaseType(@Valid @RequestBody EmployeeDTO employeeDTO) {
+	public ResponseEntity<String> addEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
 		employeeService.save(employeeDTO);
 		return ResponseEntity.ok().build();
 	}

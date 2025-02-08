@@ -5,10 +5,14 @@ import org.springframework.stereotype.Service;
 import ru.isands.test.estore.dao.entity.*;
 import ru.isands.test.estore.dao.repo.ElectroItemRepository;
 import ru.isands.test.estore.dao.repo.EmployeeRepository;
+import ru.isands.test.estore.dao.repo.PositionTypeRepository;
 import ru.isands.test.estore.dto.ElectroItemDTO;
 import ru.isands.test.estore.dto.EmployeeDTO;
 import ru.isands.test.estore.exception.EntityAlreadyExistsException;
+import ru.isands.test.estore.exception.EntityNotExistsException;
+import ru.isands.test.estore.exception.TooManyEntitiesExistsException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -28,17 +32,17 @@ public class EmployeeService extends BaseService<Employee, Long>{
         List<Shop> shops = shopService.findByNameAndAddress(dto.getShop().getName(), dto.getShop().getAddress());
 
         if(shops.size() == 0){
-            throw new EntityAlreadyExistsException("Such shop does not exists");
+            throw new EntityNotExistsException("Such shop does not exists");
         }else if(shops.size() > 1){
-            throw new EntityAlreadyExistsException("More than one shop with such name and address");
+            throw new TooManyEntitiesExistsException("More than one shop with such name and address");
         }
 
         List<PositionType> positions = positionTypeService.findByName(dto.getPositionType().getName());
 
         if(positions.size() == 0){
-            throw new EntityAlreadyExistsException("Such position type does not exists");
+            throw new EntityNotExistsException("Such position type does not exists");
         }else if(positions.size() > 1){
-            throw new EntityAlreadyExistsException("More than one position type with such name");
+            throw new TooManyEntitiesExistsException("More than one position type with such name");
         }
 
         List<Employee> existingEntities = ((EmployeeRepository)getBaseRepository())
@@ -50,5 +54,19 @@ public class EmployeeService extends BaseService<Employee, Long>{
         entity.setShop(shops.get(0));
 
         super.save(entity, existingEntities.size() != 0);
+    }
+
+    public List<Employee> findByFullNameAndBirthdayAndPositionAndShop(String lastName, String firstName, String patronymic,
+                                     LocalDate birthDate, PositionType positionType, Shop shop) {
+        return ((EmployeeRepository)getBaseRepository())
+                .findByFullNameAndBirthdayAndPositionAndShop(lastName, firstName, patronymic,
+                                                            birthDate, positionType, shop);
+    }
+
+    public List<Employee> findByFullNameAndBirthdayAndPositionAndShop(String lastName, String firstName, String patronymic,
+                                                                      LocalDate birthDate, String positionTypeName, Shop shop) {
+        return ((EmployeeRepository)getBaseRepository())
+                .findByFullNameAndBirthdayAndPositionAndShop(lastName, firstName, patronymic,
+                        birthDate, positionTypeName, shop);
     }
 }

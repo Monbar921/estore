@@ -16,6 +16,13 @@ public interface EmployeeRepository extends BaseRepository<Employee, Long> {
             "and e.birthDate = ?4 and e.positionType = ?5 and e.shop = ?6")
     public List<Employee> findByFullNameAndBirthdayAndPositionAndShop(String lastName, String firstName, String patronymic,
                                                                       LocalDate birthDate, PositionType positionType, Shop shop);
+
+    @Query("select e from Employee e join PositionType pt on e.positionType = pt " +
+            "where e.lastName = ?1 and e.firstName = ?2 and e.patronymic = ?3 " +
+            "and e.birthDate = ?4 and pt.name = ?5 and e.shop = ?6")
+    public List<Employee> findByFullNameAndBirthdayAndPositionAndShop(String lastName, String firstName, String patronymic,
+                                                                      LocalDate birthDate, String positionTypeName, Shop shop);
+
     @Query("select e from Employee e where e.positionType = ?1")
     public List<Employee> findByPosition(PositionType positionType);
 }

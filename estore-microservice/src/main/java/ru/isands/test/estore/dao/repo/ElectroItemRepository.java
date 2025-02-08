@@ -11,5 +11,8 @@ public interface ElectroItemRepository extends BaseRepository<ElectroItem, Long>
     List<ElectroItem> findByNameAndElectroTypeName(String name, String electroTypeName);
 
     @Query("select ei from ElectroItem ei where ei.name = ?1 and ei.electroType = ?2")
-    List<ElectroItem> findByNameAndElectroTypeId(String name, ElectroType electroType);
+    List<ElectroItem> findByNameAndElectroType(String name, ElectroType electroType);
+
+    @Query("select ei from ElectroItem ei where ei.name = ?1 and ei.electroType = ?2")
+    List<ElectroItem> findByNameAndElectroType(String name, Long electroTypeId);
 }

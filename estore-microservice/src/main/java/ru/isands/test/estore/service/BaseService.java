@@ -10,6 +10,8 @@ import ru.isands.test.estore.dao.repo.BaseRepository;
 import ru.isands.test.estore.dao.repo.ShopRepository;
 import ru.isands.test.estore.exception.EntityAlreadyExistsException;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 @Data
 public abstract class BaseService<T, K extends Number> {
@@ -20,5 +22,9 @@ public abstract class BaseService<T, K extends Number> {
             throw new EntityAlreadyExistsException("Entity already exist");
         }
         return baseRepository.save(entity);
+    }
+
+    public Optional<T> findById(K id) {
+        return baseRepository.findById(id);
     }
 }

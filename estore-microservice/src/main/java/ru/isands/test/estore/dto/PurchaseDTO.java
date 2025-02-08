@@ -19,14 +19,14 @@ import java.time.LocalDate;
 @Data
 public class PurchaseDTO {
     @NotNull
-    private ElectroItemDTO electroItem;
+    private Long electroItem;
     @NotNull
-    private EmployeeDTO employee;
+    private Long employee;
     @NotNull
-    private ShopDTO shop;
+    private Long shop;
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate purchaseDate;
     @NotNull
-    private PurchaseTypeDTO purchaseType;
+    private Long purchaseType;
 }
