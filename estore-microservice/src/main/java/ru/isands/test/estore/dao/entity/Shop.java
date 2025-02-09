@@ -1,15 +1,17 @@
 package ru.isands.test.estore.dao.entity;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Set;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = {"electroShops"})
 @Entity
 public class Shop implements Serializable {
 
@@ -35,4 +37,7 @@ public class Shop implements Serializable {
 	 * Адрес магазина
 	 */
 	private String address;
+
+	@OneToMany(mappedBy = "shop")
+	Set<ElectroShop> electroShops;
 }

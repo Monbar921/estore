@@ -1,12 +1,12 @@
 package ru.isands.test.estore.dao.entity;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class PurchaseType {
 	

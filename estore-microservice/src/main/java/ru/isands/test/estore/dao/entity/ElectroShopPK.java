@@ -6,9 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Data
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Embeddable
 public class ElectroShopPK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -16,11 +20,13 @@ public class ElectroShopPK implements Serializable {
 	/**
 	 *  Идентификатор магазина
 	 */
-	Long shopId;
+	@Column(name = "shop_id")
+	private Long shopId;
 	
 	/**
 	 *  Идентификатор электротовара
 	 */
-	Long electroItemId;
+	@Column(name = "electro_item_id")
+	private Long electroItemId;
 
 }

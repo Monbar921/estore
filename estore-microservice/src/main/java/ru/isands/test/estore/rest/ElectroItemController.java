@@ -5,16 +5,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.isands.test.estore.dto.ElectroItemDTO;
 import ru.isands.test.estore.dto.ElectroTypeDTO;
 import ru.isands.test.estore.service.ElectroItemService;
 import ru.isands.test.estore.service.ElectroTypeService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -29,5 +28,14 @@ public class ElectroItemController {
 	public ResponseEntity<String> addPurchaseType(@Valid @RequestBody ElectroItemDTO electroItemDTO) {
 		electroItemService.save(electroItemDTO);
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/findAll")
+	@Operation(summary = "Просмотр списка всех товаров с пагинацией", responses = {
+			@ApiResponse(description = "Просмотр списка всех товаров с пагинацией")
+	})
+	public ResponseEntity<List<ElectroItemDTO>> findAll(@RequestParam Integer page,
+														@RequestParam @Size(min = 1) Integer size) {
+		return ResponseEntity.ok(electroItemService.findAllDto(page, size));
 	}
 }

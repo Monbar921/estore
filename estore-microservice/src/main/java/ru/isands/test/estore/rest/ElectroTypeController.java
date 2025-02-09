@@ -5,17 +5,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.isands.test.estore.dao.entity.ElectroType;
+import ru.isands.test.estore.dto.ElectroItemDTO;
 import ru.isands.test.estore.dto.ElectroTypeDTO;
 import ru.isands.test.estore.dto.PurchaseTypeDTO;
 import ru.isands.test.estore.service.ElectroTypeService;
 import ru.isands.test.estore.service.PurchaseTypeService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -30,5 +30,14 @@ public class ElectroTypeController {
 	public ResponseEntity<String> addPurchaseType(@Valid @RequestBody ElectroTypeDTO electroTypeDTO) {
 		electroTypeService.save(electroTypeDTO);
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/findAll")
+	@Operation(summary = "Просмотр списка всех типов товаров с пагинацией", responses = {
+			@ApiResponse(description = "Просмотр списка всех типов товаров с пагинацией")
+	})
+	public ResponseEntity<List<ElectroTypeDTO>> findAll(@RequestParam Integer page,
+														@RequestParam @Size(min = 1) Integer size) {
+		return ResponseEntity.ok(electroTypeService.findAllDto(page, size));
 	}
 }

@@ -70,8 +70,14 @@ CREATE TABLE IF NOT EXISTS electro_shop (
     PRIMARY KEY (electro_item_id, shop_id)
 );
 
--- Insert Initial Data
-INSERT INTO positions (name) VALUES ('Manager'), ('Sales Associate') ON CONFLICT DO NOTHING;
-INSERT INTO electronics_types (name) VALUES ('Laptop'), ('Smartphone'), ('Tablet') ON CONFLICT DO NOTHING;
-INSERT INTO stores (name, address) VALUES ('Tech Store', '123 Main St'), ('Gadget Hub', '456 Market St') ON CONFLICT DO NOTHING;
-INSERT INTO purchase_types (name) VALUES ('Online'), ('In-Store') ON CONFLICT DO NOTHING;
+CREATE SEQUENCE shop_seq
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    NO CYCLE;
+
+-- -- Insert Initial Data
+-- INSERT INTO positions (name) VALUES ('Manager'), ('Sales Associate') ON CONFLICT DO NOTHING;
+-- INSERT INTO electronics_types (name) VALUES ('Laptop'), ('Smartphone'), ('Tablet') ON CONFLICT DO NOTHING;
+-- INSERT INTO stores (name, address) VALUES ('Tech Store', '123 Main St'), ('Gadget Hub', '456 Market St') ON CONFLICT DO NOTHING;
+-- INSERT INTO purchase_types (name) VALUES ('Online'), ('In-Store') ON CONFLICT DO NOTHING;

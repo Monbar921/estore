@@ -1,57 +1,55 @@
 package ru.isands.test.estore.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.isands.test.estore.dao.entity.*;
-import ru.isands.test.estore.dao.repo.ElectroItemRepository;
 import ru.isands.test.estore.dao.repo.EmployeeRepository;
-import ru.isands.test.estore.dao.repo.PositionTypeRepository;
+import ru.isands.test.estore.dto.BestSellerDTO;
 import ru.isands.test.estore.dto.ElectroItemDTO;
 import ru.isands.test.estore.dto.EmployeeDTO;
-import ru.isands.test.estore.exception.EntityAlreadyExistsException;
-import ru.isands.test.estore.exception.EntityNotExistsException;
-import ru.isands.test.estore.exception.TooManyEntitiesExistsException;
+import ru.isands.test.estore.exception.EntityNotExistsException;;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService extends BaseService<Employee, Long>{
     private final PositionTypeService positionTypeService;
     private final ShopService shopService;
+    private final ElectroTypeService electroTypeService;
 
 
     public EmployeeService(EmployeeRepository repository, ModelMapper modelMapper,
-                           PositionTypeService positionTypeService, ShopService shopService) {
+                           PositionTypeService positionTypeService, ShopService shopService, ElectroTypeService electroTypeService) {
         super(repository, modelMapper);
         this.positionTypeService = positionTypeService;
         this.shopService = shopService;
+        this.electroTypeService = electroTypeService;
     }
 
     public void save(EmployeeDTO dto) {
-        List<Shop> shops = shopService.findByNameAndAddress(dto.getShop().getName(), dto.getShop().getAddress());
+        Optional<Shop> shop = shopService.findById(dto.getShop());
 
-        if(shops.size() == 0){
+        if(shop.isEmpty()){
             throw new EntityNotExistsException("Such shop does not exists");
-        }else if(shops.size() > 1){
-            throw new TooManyEntitiesExistsException("More than one shop with such name and address");
         }
 
-        List<PositionType> positions = positionTypeService.findByName(dto.getPositionType().getName());
+        Optional<PositionType> position = positionTypeService.findById(dto.getPositionType());
 
-        if(positions.size() == 0){
+        if(position.isEmpty()){
             throw new EntityNotExistsException("Such position type does not exists");
-        }else if(positions.size() > 1){
-            throw new TooManyEntitiesExistsException("More than one position type with such name");
         }
 
         List<Employee> existingEntities = ((EmployeeRepository)getBaseRepository())
                 .findByFullNameAndBirthdayAndPositionAndShop(dto.getLastName(), dto.getFirstName(), dto.getPatronymic(),
-                        dto.getBirthDate(), positions.get(0), shops.get(0));
+                        dto.getBirthDate(), position.get(), shop.get());
 
         Employee entity = getModelMapper().map(dto, Employee.class);
-        entity.setPositionType(positions.get(0));
-        entity.setShop(shops.get(0));
+        entity.setPositionType(position.get());
+        entity.setShop(shop.get());
 
         super.save(entity, existingEntities.size() != 0);
     }
@@ -68,5 +66,54 @@ public class EmployeeService extends BaseService<Employee, Long>{
         return ((EmployeeRepository)getBaseRepository())
                 .findByFullNameAndBirthdayAndPositionAndShop(lastName, firstName, patronymic,
                         birthDate, positionTypeName, shop);
+    }
+
+    public List<BestSellerDTO> findBestEmployeesByPositionAndYearAndPurchaseCount(Long positionTypeId, LocalDate year) {
+        PositionType positionType = positionTypeService.findById(positionTypeId).orElseThrow(
+                () -> new EntityNotExistsException("Such position type does not exists")
+        );
+
+        if(year == null){
+            year = LocalDate.of(LocalDate.now().getYear(), 1, 1);
+        }
+
+        LocalDate nextYear = year.plusYears(1);
+
+        return ((EmployeeRepository)getBaseRepository()).findBestEmployeesByPositionAndYearOrderByPurchaseCountDesc(
+                positionType, year, nextYear);
+    }
+
+    public List<BestSellerDTO> findBestEmployeesByPositionAndPurchaseSum(Long positionTypeId, LocalDate year) {
+        PositionType positionType = positionTypeService.findById(positionTypeId).orElseThrow(
+                () -> new EntityNotExistsException("Such position type does not exists")
+        );
+
+        if(year == null){
+            year = LocalDate.of(LocalDate.now().getYear(), 1, 1);
+        }
+
+        LocalDate nextYear = year.plusYears(1);
+
+        return ((EmployeeRepository)getBaseRepository()).findBestEmployeesByPositionAndYearOrderByPurchaseSumDesc(
+                positionType, year, nextYear);
+    }
+
+    public Optional<BestSellerDTO> findBestEmployeeByPositionAndElectroType(Long positionTypeId, Long electroTypeId) {
+        PositionType positionType = positionTypeService.findById(positionTypeId).orElseThrow(
+                () -> new EntityNotExistsException("Such position type does not exists")
+        );
+
+        ElectroType electroType = electroTypeService.findById(electroTypeId).orElseThrow(
+                () -> new EntityNotExistsException("Such electro type does not exists")
+        );
+        List<BestSellerDTO> bestSellers = ((EmployeeRepository)getBaseRepository()).findBestEmployeeByPositionAndElectroType(
+                positionType, electroType,  PageRequest.of(0, 1));
+
+        return Optional.ofNullable(bestSellers.get(0));
+    }
+
+    public List<EmployeeDTO> findAllDto(int page, int size) {
+        List<Employee> entities = super.findAll(page, size);
+        return entities.stream().map(EmployeeDTO::new).collect(Collectors.toList());
     }
 }

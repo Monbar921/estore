@@ -4,14 +4,15 @@ package ru.isands.test.estore.dao.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.*;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Employee implements Serializable {
 
@@ -68,4 +69,7 @@ public class Employee implements Serializable {
 	 */
 	@Column(name = "gender", nullable = false)
 	private boolean gender;
+
+	@OneToMany(mappedBy = "employee")
+	Set<ElectroEmployee> electroemployees;
 }

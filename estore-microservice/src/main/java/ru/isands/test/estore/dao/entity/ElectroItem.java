@@ -1,11 +1,18 @@
 package ru.isands.test.estore.dao.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = {"electroShops"})
 @Entity
 public class ElectroItem implements Serializable {
 
@@ -55,4 +62,7 @@ public class ElectroItem implements Serializable {
 	 */
 	@Column
 	private String description;
+
+	@OneToMany(mappedBy = "electroItem")
+	Set<ElectroShop> electroShops;
 }

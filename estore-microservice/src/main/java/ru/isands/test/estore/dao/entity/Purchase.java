@@ -4,9 +4,14 @@ package ru.isands.test.estore.dao.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.*;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Purchase implements Serializable {
 
