@@ -1,6 +1,5 @@
 package ru.isands.test.estore.rest;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -9,14 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import ru.isands.test.estore.dao.entity.PositionType;
-import ru.isands.test.estore.dao.repo.EmployeeRepository;
 import ru.isands.test.estore.dto.BestSellerDTO;
-import ru.isands.test.estore.dto.ElectroItemDTO;
-import ru.isands.test.estore.dto.ElectroTypeDTO;
 import ru.isands.test.estore.dto.EmployeeDTO;
-import ru.isands.test.estore.exception.EntityNotExistsException;
-import ru.isands.test.estore.service.ElectroItemService;
 import ru.isands.test.estore.service.EmployeeService;
 
 import javax.validation.Valid;
@@ -36,7 +29,7 @@ public class EmployeeController {
 	@Operation(summary = "Добавление типа электроники", responses = {
 			@ApiResponse(description = "Добавление типа электроники")
 	})
-	public ResponseEntity<String> addEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
+	public ResponseEntity<String> addEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
 		employeeService.save(employeeDTO);
 		return ResponseEntity.ok().build();
 	}
@@ -49,7 +42,7 @@ public class EmployeeController {
 	})
 	public ResponseEntity<List<BestSellerDTO>> findBestSellingQuantityEmployeesByPositionAndYear(
 			@NotNull @RequestParam Long positionTypeId
-			,@NotNull @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate year) {
+			,@RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate year) {
 
 		return ResponseEntity.ok(employeeService.findBestEmployeesByPositionAndYearAndPurchaseCount(positionTypeId, year));
 	}
@@ -86,5 +79,14 @@ public class EmployeeController {
 	public ResponseEntity<List<EmployeeDTO>> findAll(@RequestParam Integer page,
 														@RequestParam @Size(min = 1) Integer size) {
 		return ResponseEntity.ok(employeeService.findAllDto(page, size));
+	}
+
+	@DeleteMapping ("/delete")
+	@Operation(summary = "Удаление сотрудника", responses = {
+			@ApiResponse(description = "Удаление сотрудника")
+	})
+	public ResponseEntity<String> delete(@RequestParam @NotNull Long id) {
+		employeeService.deleteById(id);
+		return ResponseEntity.ok().build();
 	}
 }

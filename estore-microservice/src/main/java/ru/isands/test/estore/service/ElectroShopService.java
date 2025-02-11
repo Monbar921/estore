@@ -3,12 +3,11 @@ package ru.isands.test.estore.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.isands.test.estore.dao.entity.*;
-import ru.isands.test.estore.dao.repo.ElectroItemRepository;
 import ru.isands.test.estore.dao.repo.ElectroShopRepository;
-import ru.isands.test.estore.dto.ElectroItemDTO;
 import ru.isands.test.estore.dto.ElectroShopDTO;
 import ru.isands.test.estore.exception.EntityNotExistsException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,6 +24,7 @@ public class ElectroShopService extends BaseService<ElectroShop, Long>{
         this.electroItemService = electroItemService;
     }
 
+    @Transactional
     public void save(ElectroShopDTO dto) {
         Shop shop = shopService.findById(dto.getShop()).orElseThrow(
                 () -> new EntityNotExistsException("Such shop does not exists")
@@ -49,4 +49,15 @@ public class ElectroShopService extends BaseService<ElectroShop, Long>{
         return entities.stream().map(ElectroShopDTO::new).collect(Collectors.toList());
     }
 
+    @Transactional
+    public void deleteByEmployeeAndElectroType(Long electroShopId, Long electroItemId) {
+        Shop shop = shopService.findById(electroShopId).orElseThrow(
+                () -> new EntityNotExistsException("Such shop does not exists")
+        );
+
+        ElectroItem electroItem = electroItemService.findById(electroItemId).orElseThrow(
+                () -> new EntityNotExistsException("Such electro item does not exists")
+        );
+        ((ElectroShopRepository)getBaseRepository()).deleteByShopAndElectroItem(shop, electroItem);
+    }
 }

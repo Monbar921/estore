@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.isands.test.estore.dao.entity.*;
 import ru.isands.test.estore.dao.repo.EmployeeRepository;
 import ru.isands.test.estore.dto.BestSellerDTO;
-import ru.isands.test.estore.dto.ElectroItemDTO;
 import ru.isands.test.estore.dto.EmployeeDTO;
 import ru.isands.test.estore.exception.EntityNotExistsException;;
 
@@ -109,7 +108,7 @@ public class EmployeeService extends BaseService<Employee, Long>{
         List<BestSellerDTO> bestSellers = ((EmployeeRepository)getBaseRepository()).findBestEmployeeByPositionAndElectroType(
                 positionType, electroType,  PageRequest.of(0, 1));
 
-        return Optional.ofNullable(bestSellers.get(0));
+        return Optional.ofNullable(bestSellers.size() > 0 ? bestSellers.get(0) : null);
     }
 
     public List<EmployeeDTO> findAllDto(int page, int size) {

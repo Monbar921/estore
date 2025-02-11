@@ -1,9 +1,7 @@
 package ru.isands.test.estore.dao.repo;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.isands.test.estore.dao.entity.PurchaseType;
-import ru.isands.test.estore.dao.entity.Shop;
 
 import java.util.List;
 

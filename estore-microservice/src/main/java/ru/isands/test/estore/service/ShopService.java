@@ -1,14 +1,9 @@
 package ru.isands.test.estore.service;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.isands.test.estore.dao.entity.*;
-import ru.isands.test.estore.dao.repo.ElectroTypeRepository;
-import ru.isands.test.estore.dao.repo.EmployeeRepository;
 import ru.isands.test.estore.dao.repo.ShopRepository;
-import ru.isands.test.estore.dto.BestSellerDTO;
-import ru.isands.test.estore.dto.PurchaseTypeDTO;
 import ru.isands.test.estore.dto.ShopDTO;
 import ru.isands.test.estore.exception.EntityNotExistsException;
 

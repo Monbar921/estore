@@ -1,0 +1,18 @@
+.type-table {
+ width: 100%;
+ border-collapse: collapse;
+ margin-top: 10px;
+ border: 2px solid black; /* Outer border */
+}
+
+.type-table th, .type-table td {
+ border: 1px solid black; /* Inner borders */
+ padding: 8px;
+ text-align: left;
+}
+
+.type-table th {
+ background-color: #f4f4f4;
+ font-weight: bold;
+ text-align: center;
+}

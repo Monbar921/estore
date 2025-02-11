@@ -9,16 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.isands.test.estore.dto.ElectroItemDTO;
-import ru.isands.test.estore.service.ElectroItemService;
 import ru.isands.test.estore.service.FileService;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
-import java.io.ByteArrayInputStream;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 @AllArgsConstructor
 @RestController

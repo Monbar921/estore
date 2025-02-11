@@ -7,11 +7,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isands.test.estore.dto.ElectroShopDTO;
-import ru.isands.test.estore.dto.ElectroTypeDTO;
 import ru.isands.test.estore.service.ElectroShopService;
-import ru.isands.test.estore.service.ElectroTypeService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -37,5 +36,14 @@ public class ElectroShopController {
 	public ResponseEntity<List<ElectroShopDTO>> findAll(@RequestParam Integer page,
 														@RequestParam @Size(min = 1) Integer size) {
 		return ResponseEntity.ok(electroShopService.findAllDto(page, size));
+	}
+
+	@DeleteMapping ("/delete")
+	@Operation(summary = "Удаление связи магазин/товар", responses = {
+			@ApiResponse(description = "Удаление связи магазин/товар")
+	})
+	public ResponseEntity<String> delete(@RequestParam @NotNull Long electroShop, @RequestParam @NotNull Long electroItem) {
+		electroShopService.deleteByEmployeeAndElectroType(electroShop, electroItem);
+		return ResponseEntity.ok().build();
 	}
 }

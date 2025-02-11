@@ -1,19 +1,12 @@
 package ru.isands.test.estore.service;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.isands.test.estore.dao.entity.ElectroItem;
-import ru.isands.test.estore.dao.entity.ElectroShop;
 import ru.isands.test.estore.dao.entity.ElectroType;
-import ru.isands.test.estore.dao.entity.Shop;
 import ru.isands.test.estore.dao.repo.ElectroItemRepository;
-import ru.isands.test.estore.dao.repo.ElectroTypeRepository;
 import ru.isands.test.estore.dto.ElectroItemDTO;
-import ru.isands.test.estore.exception.EntityAlreadyExistsException;
 import ru.isands.test.estore.exception.EntityNotExistsException;
-import ru.isands.test.estore.exception.TooManyEntitiesExistsException;
 
 import java.util.List;
 import java.util.Optional;

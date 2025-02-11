@@ -1,19 +1,17 @@
 package ru.isands.test.estore.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.isands.test.estore.dao.entity.*;
-import ru.isands.test.estore.dao.repo.EmployeeRepository;
 import ru.isands.test.estore.dao.repo.PurchaseRepository;
-import ru.isands.test.estore.dto.EmployeeDTO;
-import ru.isands.test.estore.dto.PositionTypeDTO;
 import ru.isands.test.estore.dto.PurchaseDTO;
-import ru.isands.test.estore.exception.EntityAlreadyExistsException;
 import ru.isands.test.estore.exception.EntityNotExistsException;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,5 +84,19 @@ public class PurchaseService extends BaseService<Purchase, Long> {
     public List<PurchaseDTO> findAllDto(int page, int size) {
         List<Purchase> entities = super.findAll(page, size);
         return entities.stream().map(PurchaseDTO::new).collect(Collectors.toList());
+    }
+
+    public List<PurchaseDTO> findAllInsideDates(LocalDate from, LocalDate to, Integer page, Integer size, Boolean isAsc) {
+        if(from.isAfter(to)){
+            throw new IllegalArgumentException();
+        }
+        PurchaseRepository purchaseRepository = (PurchaseRepository)getBaseRepository();
+        Pageable pageable = PageRequest.of(page, size);
+
+        if(isAsc == null || isAsc){
+            return purchaseRepository.findAllInsideDatesAsc(from, to, pageable);
+        }else{
+            return purchaseRepository.findAllInsideDatesDesc(from, to, pageable);
+        }
     }
 }

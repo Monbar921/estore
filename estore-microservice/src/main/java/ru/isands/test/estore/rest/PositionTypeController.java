@@ -6,13 +6,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.isands.test.estore.dto.EmployeeDTO;
 import ru.isands.test.estore.dto.PositionTypeDTO;
-import ru.isands.test.estore.dto.PurchaseTypeDTO;
 import ru.isands.test.estore.service.PositionTypeService;
-import ru.isands.test.estore.service.PurchaseTypeService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -38,5 +36,14 @@ public class PositionTypeController {
 	public ResponseEntity<List<PositionTypeDTO>> findAll(@RequestParam Integer page,
 													 @RequestParam @Size(min = 1) Integer size) {
 		return ResponseEntity.ok(positionTypeService.findAllDto(page, size));
+	}
+
+	@DeleteMapping ("/delete")
+	@Operation(summary = "Удаление должности", responses = {
+			@ApiResponse(description = "Удаление должности")
+	})
+	public ResponseEntity<String> delete(@RequestParam @NotNull Long id) {
+		positionTypeService.deleteById(id);
+		return ResponseEntity.ok().build();
 	}
 }

@@ -8,12 +8,8 @@ import ru.isands.test.estore.dto.BestSellerDTO;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public interface EmployeeRepository extends BaseRepository<Employee, Long> {
-
-    @Query("select e from Employee e where e.lastName = ?1 and e.firstName = ?2 and e.patronymic = ?3 and e.birthDate = ?4")
-    List<Employee> findByFullName(String lastName, String firstName, String patronymic, Date birthDate);
 
     @Query("select e from Employee e where e.lastName = ?1 and e.firstName = ?2 and e.patronymic = ?3 " +
             "and e.birthDate = ?4 and e.positionType = ?5 and e.shop = ?6")
@@ -26,14 +22,6 @@ public interface EmployeeRepository extends BaseRepository<Employee, Long> {
     List<Employee> findByFullNameAndBirthdayAndPositionAndShop(String lastName, String firstName, String patronymic,
                                                                LocalDate birthDate, String positionTypeName, Shop shop);
 
-    @Query("select e from Employee e " +
-            "where e.lastName = ?1 and e.firstName = ?2 and e.patronymic = ?3 " +
-            "and e.birthDate = ?4 and e.positionType = ?5 and e.shop = ?6")
-    List<Employee> findByFullNameAndBirthdayAndPositionAndShop(String lastName, String firstName, String patronymic,
-                                                               LocalDate birthDate, Long positionType, Long shop);
-
-    @Query("select e from Employee e where e.positionType = ?1")
-    List<Employee> findByPosition(PositionType positionType);
 
     @Query("select new ru.isands.test.estore.dto.BestSellerDTO(e, count(1), 0l) from Employee e join Purchase p on e = p.employee where e.positionType = ?1 " +
             "and p.purchaseDate >= ?2 and p.purchaseDate < ?3 group by e order by 2 desc")

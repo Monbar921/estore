@@ -1,28 +1,15 @@
 package ru.isands.test.estore.service;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
-import ru.isands.test.estore.dao.entity.ElectroItem;
-import ru.isands.test.estore.dao.entity.ElectroType;
-import ru.isands.test.estore.dao.repo.ElectroItemRepository;
 import ru.isands.test.estore.dto.*;
-import ru.isands.test.estore.exception.EntityNotExistsException;
-
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 

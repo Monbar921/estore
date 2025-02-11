@@ -2,12 +2,8 @@ package ru.isands.test.estore.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import ru.isands.test.estore.dao.entity.Purchase;
 import ru.isands.test.estore.dao.entity.PurchaseType;
-import ru.isands.test.estore.dao.entity.Shop;
 import ru.isands.test.estore.dao.repo.PurchaseTypeRepository;
-import ru.isands.test.estore.dao.repo.ShopRepository;
-import ru.isands.test.estore.dto.PurchaseDTO;
 import ru.isands.test.estore.dto.PurchaseTypeDTO;
 
 import java.util.List;

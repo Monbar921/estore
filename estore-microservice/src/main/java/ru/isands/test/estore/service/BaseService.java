@@ -2,14 +2,11 @@ package ru.isands.test.estore.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import ru.isands.test.estore.dao.entity.Shop;
 import ru.isands.test.estore.dao.repo.BaseRepository;
-import ru.isands.test.estore.dao.repo.ShopRepository;
+import ru.isands.test.estore.exception.DatabaseException;
 import ru.isands.test.estore.exception.EntityAlreadyExistsException;
 
 import java.util.List;
@@ -38,5 +35,13 @@ public abstract class BaseService<T, K extends Number> {
     public List<T> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return baseRepository.findAll(pageable).getContent();
+    }
+
+    public void deleteById(K id) {
+        try {
+            baseRepository.deleteById(id);
+        }catch (Exception e){
+            throw new DatabaseException(e.getMessage());
+        }
     }
 }

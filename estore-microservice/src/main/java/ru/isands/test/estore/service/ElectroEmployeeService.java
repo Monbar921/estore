@@ -4,11 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.isands.test.estore.dao.entity.*;
 import ru.isands.test.estore.dao.repo.ElectroEmployeeRepository;
-import ru.isands.test.estore.dao.repo.ElectroShopRepository;
 import ru.isands.test.estore.dto.ElectroEmployeeDTO;
-import ru.isands.test.estore.dto.ElectroShopDTO;
 import ru.isands.test.estore.exception.EntityNotExistsException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ public class ElectroEmployeeService extends BaseService<ElectroEmployee, Long>{
         this.electroTypeService = electroTypeService;
         this.employeeService = employeeService;
     }
-
+    @Transactional
     public void save(ElectroEmployeeDTO dto) {
         Employee employee = employeeService.findById(dto.getEmployee()).orElseThrow(
                 () -> new EntityNotExistsException("Such employee does not exists")
@@ -48,5 +47,16 @@ public class ElectroEmployeeService extends BaseService<ElectroEmployee, Long>{
         return entities.stream().map(ElectroEmployeeDTO::new).collect(Collectors.toList());
     }
 
+    @Transactional
+    public void deleteByEmployeeAndElectroType(Long electroEmployeeId, Long electroTypeId) {
+        Employee employee = employeeService.findById(electroEmployeeId).orElseThrow(
+                () -> new EntityNotExistsException("Such employee does not exists")
+        );
 
+        ElectroType electroType = electroTypeService.findById(electroTypeId).orElseThrow(
+                () -> new EntityNotExistsException("Such electro type does not exists")
+        );
+
+        ((ElectroEmployeeRepository)getBaseRepository()).deleteByEmployeeAndElectroType(employee, electroType);
+    }
 }

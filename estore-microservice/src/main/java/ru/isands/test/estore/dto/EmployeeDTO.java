@@ -5,14 +5,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.isands.test.estore.dao.entity.ElectroType;
 import ru.isands.test.estore.dao.entity.Employee;
-import ru.isands.test.estore.dao.entity.PositionType;
-import ru.isands.test.estore.dao.entity.Shop;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
