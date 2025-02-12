@@ -19,9 +19,11 @@ const UploadZipTab = () => {
       });
     },
     onSuccess: () => {
+      setErrorMessage(`Ok`);;
+      setIsErrorModalOpen(true);
     },
     onError: (err) => {
-      console.error("Error occurred while deleting:", err);
+      console.error("Error occurred while uploading:", err);
       setErrorMessage(`Error: ${err.response ? err.response.data : err.message}`);;
       setIsErrorModalOpen(true);
     },
