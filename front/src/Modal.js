@@ -5,7 +5,7 @@ const Modal = ({ message, onClose }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h3>Error</h3>
+        <h3>Result</h3>
         <p>{message}</p>
         <button onClick={onClose}>Close</button>
       </div>
